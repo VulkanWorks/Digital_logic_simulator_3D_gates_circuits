@@ -97,6 +97,7 @@ void Graphics::cleanupSwapChain() {
 }
 
 void Graphics::cleanup() {
+
 	cleanupSwapChain();
 
 	vkDestroySampler(device, textureSampler, nullptr);
@@ -1218,6 +1219,7 @@ void Graphics::createIndexBuffer() {
 void Graphics::createStorageBuffer() {
 	std::vector<glm::mat4> storageBufferData;
 	int notDrawn = 0;
+	
 	for (int i = 0; i < objects.size(); i++) {
 		if (!objects[i].visible && objects[i].relevant) {
 			objects[i].transformData *= 0;
@@ -1254,7 +1256,7 @@ void Graphics::createStorageBuffer() {
 }
 
 void Graphics::updateStorageBuffer() {
-
+	std::cout << "objects.size() = " << objects.size() << "\n";
 	std::vector<glm::mat4> storageBufferData;
 	for (int i = 0; i < objects.size(); i++) {
 		if (!objects[i].visible || !objects[i].relevant) {
@@ -1831,14 +1833,17 @@ std::vector<const char*> Graphics::getRequiredExtensions() {
 bool Graphics::checkValidationLayerSupport() {
 	uint32_t layerCount;
 	vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+	
 
 	std::vector<VkLayerProperties> availableLayers(layerCount);
 	vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
 
 	for (const char* layerName : validationLayers) {
+		
 		bool layerFound = false;
 
 		for (const auto& layerProperties : availableLayers) {
+			std::cout << layerName << "," << layerProperties.layerName << "\n";
 			if (strcmp(layerName, layerProperties.layerName) == 0) {
 				layerFound = true;
 				break;
@@ -1873,7 +1878,9 @@ std::vector<char> Graphics::readFile(const std::string& filename) {
 
 VKAPI_ATTR VkBool32 VKAPI_CALL Graphics::debugCallback(VkDebugReportFlagsEXT flags, VkDebugReportObjectTypeEXT objType, uint64_t obj, size_t location, int32_t code, const char* layerPrefix, const char* msg, void* userData) {
 	std::cerr << "validation layer: " << msg << std::endl;
-
+	while (true) {
+		std::cout << "";
+	}
 	return VK_FALSE;
 }
 
